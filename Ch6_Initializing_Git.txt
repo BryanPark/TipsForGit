@@ -1,0 +1,52 @@
+[7] Undoing Changes
+1. Undoing working directory changes
+- git status -> shows modified.
+- git diff -> shows deleted, modified lines.
+- git checkout <filename> will work.
+	but it is safer to do like git checkout -- index.html
+	-- means stay on the current branch.
+	checkout <branch_name> is make your working directory look same
+	with the branch in the repository
+
+2. Unstaging files
+- changes will be still in the working directory.
+- unstage unwanted file
+- git reset HEAD resoruces.html
+	- go look at HEAD pointer and change resources.html.
+
+3. Amending commits
+- We can change most recent commit with amend option.
+- 'git commit --amend'
+- SHA will always change.
+- new patch set will be added to that commit.
+	- when you using gerrit. you will know. you make 1 commit and multiple
+	  patches on that commit to fix or add something to your code.
+
+
+4. Retriving old versions
+- you can checkout the older version.
+- 'git checkout <commit id(SHA)> -- <filename to retrive>
+- you also undo this change by doing reset to HEAD.
+
+5. Reverting a commit
+- git revert <commit SHA>
+- go back to the previous commit. but this is also kind of commit.
+  - commit the copy of previous commit.
+
+6. Using reset to undo commits
+- Very dangerous and powerful.
+- reset and undo! commits.
+- 'git reset --options'
+	--soft
+		- does not change staging index and working directory.
+	--mixed(default)
+		- change staging index to match repository.
+		- does not change working directory.
+	--hard
+		- change staging index and working director to match repository.
+7. Removing untracked files
+- with 'git clean' command.
+- 'git clean -f' will remove every untracked files out.
+	-f -d : remove directories too
+	-f -X : just remove ignored files. leave untracked files.
+	-f -x : remove untracked and ignored files.
