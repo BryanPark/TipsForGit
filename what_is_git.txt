@@ -1,0 +1,189 @@
+[1] What is git?
+	understanding version control
+	  keeps track of changes
+	  - especially text changes. managing source codes.
+	  - maintain version 1 ,version 2 ,version 3..
+	  Version Control System(VSC), Source code management(SCM)
+
+	history
+	  SCCS(1972) - RCS - CVS - SVN(2000) - SCM - Git
+	  (use central code repository model)
+
+	distributed version control.
+	  - different users(or team) maintain their own repositories,
+	  - instead of working from a central one.
+	  - changes are stored as "change sets" or "patches"
+		- tracks changes. encapsulate it.
+		- change sets are interexchangable between differnt Repos.
+	  - encourages participation and "forking" of project.
+		- copy repo. work independently.
+		- submit change sets for inclusion or rejection
+
+[2]Configuration
+	Configuring git
+	  System - entire systemwide.
+		/etc/gitconfig
+	  User - applied on the user logged on
+		~/.gitconfig
+	  Project - on that project folder.
+		<project_path>/.git/config
+
+	  command
+		git config (--system|--global|<nothing>)
+		- global means global to User config.
+		git config --list
+
+[3]Getting Started.
+	Initialize a repository.
+	  command : make new directory -> cd to that dir -> 'git init'
+	  then that changes made in that dir tracked, all the tracking information
+	  stored in .git folder
+
+	Performing your first commit
+	  make some changes -> add the changes -> commit the changes.
+	  git add . : add every changes
+		if you want to add specific file or folder then
+		type 'git add <file or folder>'
+	  git commit : commit added changes to the repository with a message.
+		width in width 72. first line is title. after that
+		type additional informations or descriptions for the changes.
+
+	Writing commit message
+	  short single-line summary.(less than 50 chars)
+	  followed by a blank line and a more complete description.(optional)
+	  keep each line to less than 72 chars.
+	  write commit messages in present tense, not past tense.
+	  - "fix bug" or "fixes bug," not "fixed bug"
+
+	  commit messages best practices
+		bullet points are usually asterisks(*) or hyphens(-).
+		can add "ticket tracking numbers" from bugs or requests.
+		can develop shorthand for your organization
+		- "[c/c++] ~~"
+		- "bugfix: ~~"
+		- "#3085 - ~~"
+
+	  Be clear and descriptive
+		- Bad : "Fix typo"
+		- Good : "Add missing > in project section of HTML"
+		- Bad : "Update login code"
+		- Good : "Change user authentication to use Blowfish"
+		- Bad : "Updates member report, we should discuss if
+				this is right next week~~~"
+			- it's not email. and "next week" always change as time goes by.
+		- Good :
+		  """""""""""""
+		  t23094 - Fixes bug in admin logout
+
+		  When an admin logged out of the
+		  ...
+		  session[:user_id] was still set to the admin ID. This patch
+		  fixes the bug by setting session["user_id] to nil when
+		  ...
+		  """"""""""""""
+		  - tracking support ticket number, sho2t title.
+		  - what the problem was as well as what the solution was
+		  - 60 char
+
+	viewing the commit log
+	  - type 'git log', then you can see committed changes.
+	  - each one of these commit has some basic parts to it
+		- commit ID
+		- Auther : ID <EMAIL>
+		- Date of the commit
+		- commit message.
+	  You can use app 'tig' which show you commits visually better way.
+
+[4] Git Concepts and Architecture
+	The three-trees architecture
+	  git have 3-tree architecture which include staging index.
+	  ************************
+	  working
+		|
+		v git add file.txt
+	  staging index
+		|
+		v git commit
+	  repository
+	  *************************
+
+	Workflow
+	  1. Create new file or edit some file on the working directory.
+		 this change is not stored on the repository yet.
+	  2. You got to add(stage) this change. by "git add <filename>"
+	  3. When you commit your staged change,
+		 now that changes set is on the repository! it's tracked.
+
+	Using hash values(SHA-1)
+	  - when your change set committed into your repository
+		- git generate a checksum for it.
+		- same data => same checksum, change data => change checksum
+		  - data integrity.
+	  - git uses SHA-1 hash algorithm to create checksums.
+		- 40-chars hex string.
+	  - SHA-1 == commit ID
+	  referring to commits with SHA-1, you can track down commits.
+
+	HEAD pointer.
+	  - where writing commits takes place.
+	  - the last commit that we made = where HEAD points
+
+[5] Making Changes to Files.
+	Adding & Editing files.
+	  Make new file in the working directory, You can stage the change
+	  with 'git add <file>' command.
+	  If you type 'git add .' stage all the changes.
+	  After you make your own change. you need to stage(add) the changes.
+	  use "git status" to see untracked, modified files in the working project.
+
+	  - Untracked files : shows the list of new files not stored(tracked) in
+	    the repository.
+	  - Changes not staged for commit : shows the list of modified files that
+	    are tracked in the repository.
+	  - Changes to be commited : list of staged(added) changes.
+		- modified : changed files already tracked.
+		- new file : new file that doesn't exist in the repository.
+		- deleted : deleted file which is still in the repository.
+
+	  To unstage the change that you added, use 'git reset HEAD <file>
+
+	Viewing changes with diff
+	  Use 'git diff' to see difference of old, new version.
+	  You can see lines that been added and removed.
+
+	  @@ line numbers and count of removed, added @@
+	  + added line
+	  - removed line
+
+	  'git diff' shows you changes in working directory.(not staged yet)
+
+	Viewing only staged change
+	  Use 'git diff --staged'. in the older version of git, the command was
+	  'git diff --cached'
+	  with this 'git diff --staged' command, you can see what's been changed
+
+	Deleting files
+	  1. delete the file with 'rm' or GUI.
+	    after you delete the file,
+		filename will be shown in deleted list with 'git status' command.
+		'git add <deleted_file>' won't work. how you stage this change?
+		Use 'git rm <file_to_delete>' will move this change to staging index.
+	  2. Use git rm to delete the file at the very first.
+	    Use 'git rm <file_to_delete>' to delete the file in working directory.
+		Delete file and stage at the same time.
+		You can commit that change right away.
+
+	Moving and remaning files.
+	  move and rename is basically same.
+	  ex)
+	  renamed:    third_file.txt -> first_directory/third_file.txt
+	  renamed:    first_file.txt -> primary_file.txt
+
+	  1. If you move or rename your file. then git status says like
+	    you have 1 deleted file and 1 new untracked file. then how to fix this?
+	    No you don't need to. if you add and rm those files. git find out it is
+	    "renamed:" and threshold is 50% so if it is smilar above 50% considered
+		as renamed or moved file.
+	  2. in similar way if you use command 'git mv <src> <dest>'
+	    git will automatically do the works on your working directory.
+		move the file and add this change to staging index.
